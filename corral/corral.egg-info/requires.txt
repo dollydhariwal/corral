@@ -1,0 +1,11 @@
+TurboGears2 >= 2.3.4
+Genshi
+zope.sqlalchemy >= 0.4
+sqlalchemy
+sqlalchemy-migrate
+repoze.who
+repoze.who-friendlyform >= 1.0.4
+tgext.admin >= 0.5.1
+repoze.who.plugins.sa
+tw2.forms
+docutils

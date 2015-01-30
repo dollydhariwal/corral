@@ -1,0 +1,4 @@
+recursive-include corral/public *
+include corral/public/favicon.ico
+recursive-include corral/i18n *
+recursive-include corral/templates *
