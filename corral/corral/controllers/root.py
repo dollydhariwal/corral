@@ -7,6 +7,7 @@ from tg.exceptions import HTTPFound
 
 from corral.lib.base import BaseController
 from corral.controllers.error import ErrorController
+from corral.controllers.locateAddresses import AddressController, SelectAddressesForm
 
 __all__ = ['RootController']
 
@@ -36,18 +37,18 @@ class RootController(BaseController):
         """Handle the front-page."""
         return dict(page='index')
 
-    @expose('corral.templates.about')
-    def about(self):
-        """Handle the 'about' page."""
-        return dict(page='about')
+    @expose('corral.templates.getComps')
+    def getComps(self):
+        """Handle the getComps-page."""
+        return dict(page='getComps')
 
-    @expose('corral.templates.environ')
-    def environ(self):
-        """This method showcases TG's access to the wsgi environment."""
-        return dict(page='environ', environment=request.environ)
+    @expose('corral.templates.locateAddresses')
+    def locateAddresses(self):
+        """Handle the 'localteAddresses' page."""
+        return dict(page='locateAddresses', form=SelectAddressesForm)
+    
+    @expose()
+    def locate(self,**kw):
+        return AddressController().locate(**kw)
 
-    @expose('corral.templates.data')
-    @expose('json')
-    def data(self, **kw):
-        """This method showcases how you can use the same controller for a data page and a display page"""
-        return dict(page='data', params=kw)
+    

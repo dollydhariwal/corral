@@ -9,6 +9,7 @@
   <meta py:replace="select('*')"/>
   <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/bootstrap.min.css')}" />
   <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/style.css')}" />
+  <link rel="stylesheet" type="text/css" media="screen" href="${tg.url('/css/gpsv.css')}" />
 </head>
 
 <body py:match="body" py:attrs="select('@*')">
@@ -31,8 +32,8 @@
       <ul class="nav navbar-nav">
         <li class="${('', 'active')[value_of('page') == 'index']}"><a href="${tg.url('/')}">Welcome</a></li>
         <li class="${('', 'active')[value_of('page') == 'about']}"><a href="${tg.url('/about')}">About</a></li>
-        <li class="${('', 'active')[value_of('page') == 'data']}"><a href="${tg.url('/data')}">Serving Data</a></li>
-        <li class="${('', 'active')[value_of('page') == 'environ']}"><a href="${tg.url('/environ')}">WSGI Environment</a></li>
+        <li class="${('', 'active')[value_of('page') == 'locateAddresses']}"><a href="${tg.url('/locateAddresses')}">Locate Addresses</a></li>
+        <li class="${('', 'active')[value_of('page') == 'getComps']}"><a href="${tg.url('/getComps')}">Get Comparables</a></li>
       </ul>
 
       <ul py:if="tg.auth_stack_enabled" class="nav navbar-nav navbar-right">
@@ -64,7 +65,13 @@
     <p>Copyright &copy; ${getattr(tmpl_context, 'project_name', 'TurboGears2')} ${h.current_year()}</p>
   </footer>
 
+  <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFteaWSX1WvVckfdaXBXkopxFzHxpmGug">
+  </script>
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="${tg.url('/javascript/bootstrap.min.js')}"></script>
+  <script src="${tg.url('/javascript/key.js')}"></script>
+  <script src="${tg.url('/javascript/geocoder.js')}"></script>
+  
 </body>
 </html>
