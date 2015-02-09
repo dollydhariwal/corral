@@ -8,6 +8,7 @@ from tg.exceptions import HTTPFound
 from corral.lib.base import BaseController
 from corral.controllers.error import ErrorController
 from corral.controllers.locateAddresses import AddressController, SelectAddressesForm
+from corral.controllers.getComps import CompController, CompAddressForm
 
 __all__ = ['RootController']
 
@@ -40,12 +41,12 @@ class RootController(BaseController):
     @expose('corral.templates.getComps')
     def getComps(self):
         """Handle the getComps-page."""
-        return dict(page='getComps')
+        return dict(page='getComps', form=CompAddressForm)
 
     @expose('corral.templates.locateAddresses')
     def locateAddresses(self):
         """Handle the 'localteAddresses' page."""
-        return dict(page='locateAddresses', form=SelectAddressesForm)
+        return dict(page='locateAddresses')
     
     @expose()
     def locate(self,**kw):
