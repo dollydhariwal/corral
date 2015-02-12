@@ -1,0 +1,74 @@
+# -*- coding: utf-8 -*-
+"""locate address controller."""
+
+from corral.lib.base import BaseController
+import tw2.forms as forms
+from tg import redirect, require, flash, url
+import requests
+import urllib2
+import xml.etree.ElementTree as ET
+from pyzillow import ZillowWrapper, GetDeepSearchResults #from pyzillow import ZillowWrapper, GetUpdatedPropertyDetails
+
+
+
+
+
+__all__ = ['CompController']
+
+
+class CompController(BaseController):
+    """
+    The Address Controller for the corral Application
+    """
+    def __init__(self,privateToken=None):
+        """Stores information about the server
+        url : the URL of the highrise server
+        private_token: the user private token
+        email: the user email/login
+        password: the user password (associated with email)
+        """
+        self._url = 'http://www.zillow.com/webservice'
+        self._privateToken = 'X1-ZWz1azdtprntor_8xo7s'
+        self.zillow_data = ZillowWrapper(api_key=self._privateToken)
+        self._connection()
+        
+        
+    def _connection(self):
+        password = 'X'
+        passmanager = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        passmanager.add_password(None, self._url, self._privateToken, password)
+        authhandler = urllib2.HTTPBasicAuthHandler(passmanager)
+        self.opener = urllib2.build_opener(authhandler)
+        urllib2.install_opener(self.opener)
+
+    def getPropertyId(self, address=None, zipcode=None):
+        deep_search_response = self.zillow_data.get_deep_search_results(address, zipcode) 
+        result = GetDeepSearchResults(deep_search_response)
+        return result
+       
+    def findComps(self, address=None, zipcode=None):
+        zpid = self.getPropertyId(address=address, zipcode=zipcode)
+        page = urllib2.urlopen("%s/GetDeepComps.htm?zws-id=%s&zpid=%s&count=10" % (self._url,self._privateToken,zpid)).read()
+        root = ET.fromstring(page)
+        propertytDict = {}
+        for comp in root.iter('comp'):
+            address = "%s" % ( comp.find('address').find('street').text)
+            zip = comp.find('address').find('zipcode').text
+            price = comp.find('lastSoldPrice').text
+            updated = comp.find('lastSoldDate').text
+            propertytDict[comp.find('zpid').text] = "%s %s      price: %s         last-updated: %s" % (address, zip,price,updated )
+        return propertytDict 
+    
+    def getComps(self,**kw):
+        return redirect(url(base_url='/getComps'), params=kw)
+        
+    
+    
+    
+class CompAddressForm(forms.Form):
+    class child(forms.TableForm):
+        address = forms.TextField()
+        zipcode = forms.TextField()
+        
+    action = '/getComps'
+    

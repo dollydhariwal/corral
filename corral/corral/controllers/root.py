@@ -39,10 +39,14 @@ class RootController(BaseController):
         return dict(page='index')
 
     @expose('corral.templates.getComps')
-    def getComps(self):
+    def getComps(self, **kw):
         """Handle the getComps-page."""
-        return dict(page='getComps', form=CompAddressForm)
-
+        if kw:
+            kw['result'] = CompController().findComps(address=kw['address'],zipcode=kw['zipcode'])
+            return dict(page='getComps', kw=kw, form=CompAddressForm)
+        else:
+            return dict(page='getComps', kw=kw, form=CompAddressForm)
+        
     @expose('corral.templates.locateAddresses')
     def locateAddresses(self):
         """Handle the 'localteAddresses' page."""
