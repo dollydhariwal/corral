@@ -38,6 +38,8 @@ function InitializeGeocoder() {
 	si['mapquest'].keyless_limit = 2;
 	si['mapquestopen'].keyless_limit = 5;
 	
+	si['google'].firstcount = 0;
+	
 	si['google'].allow_text = false;
 	
 	for (var ds in si) {
@@ -408,6 +410,7 @@ function GeocodeMultiple(input_id,output_id) {
 	si['google'].keyless_limit = (elevation) ? 5 : 1;
 	
 	si['google'].allow_text = false;
+	si['google'].firstcount = 0;
 	
 	for (var ds in si) {
 		if (typeof(eval('self.'+ds+'_key')) != 'undefined') { si[ds].key = eval(ds+'_key'); }
@@ -772,6 +775,22 @@ function OutputRow(d,coords) {
 		} else {
 			// draw a map from other sources?
 		}
+
+		
+		
+		if (si[source].firstcount < 1){
+		
+			alert("I am here");
+			// Add circle overlay and bind to marker
+			var circle = new google.maps.Circle({
+ 				 map: map,
+  				 radius: 16093,    // 10 miles in metres
+  				 fillColor: '#CC6600'
+			});
+			circle.bindTo('center', marker, 'position');
+		}
+		
+		si[source].firstcount = si[source].firstcount + 1;
 		
 	}
 	results_textarea.scrollTop = results_textarea.scrollHeight;
