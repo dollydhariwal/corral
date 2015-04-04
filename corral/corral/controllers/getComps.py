@@ -7,7 +7,6 @@ from tg import redirect, require, flash, url
 import requests
 import urllib2
 import xml.etree.ElementTree as ET
-from pyzillow import ZillowWrapper, GetDeepSearchResults #from pyzillow import ZillowWrapper, GetUpdatedPropertyDetails
 
 
 
@@ -29,7 +28,6 @@ class CompController(BaseController):
         """
         self._url = 'http://www.zillow.com/webservice'
         self._privateToken = 'X1-ZWz1azdtprntor_8xo7s'
-        self.zillow_data = ZillowWrapper(api_key=self._privateToken)
         self._connection()
         
         
@@ -42,9 +40,14 @@ class CompController(BaseController):
         urllib2.install_opener(self.opener)
 
     def getPropertyId(self, address=None, zipcode=None):
-        deep_search_response = self.zillow_data.get_deep_search_results(address, zipcode) 
-        result = GetDeepSearchResults(deep_search_response)
-        return result
+        page = urllib2.urlopen("%s/GetDeepSearchResults.htm?zws-id=%s&address=%s&citystatezip=%s" % (self._url,self._privateToken,address.replace(" ", "+"), zipcode)).read()
+        root = ET.fromstring(page)
+        property_id = 'None'
+        
+        for view in root.iter('result'):
+            property_id = view.find('zpid').text 
+            
+        return property_id
        
     def findComps(self, address=None, zipcode=None):
         zpid = self.getPropertyId(address=address, zipcode=zipcode)

@@ -10,7 +10,6 @@ import xlrd
 import os
 import datetime 
 import xml.etree.ElementTree as ET
-from pyzillow import ZillowWrapper, GetDeepSearchResults #from pyzillow import ZillowWrapper, GetUpdatedPropertyDetails
 import cPickle as pickle
 import plotly.plotly as py
 from plotly.graph_objs import *
@@ -38,7 +37,6 @@ class ViewController(BaseController):
         """
         self._url = 'http://www.zillow.com/webservice'
         self._privateToken = 'X1-ZWz1azdtprntor_8xo7s'
-        self.zillow_data = ZillowWrapper(api_key=self._privateToken)
         self.input_location = "/home/vipul/corral/corral/exceldata"
         self.output_location = "/home/vipul/corral/corral/excelresults"
         self.image_location = "/home/vipul/corral/corral/corral/public/resultimages"
