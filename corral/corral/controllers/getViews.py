@@ -126,40 +126,44 @@ class ViewController(BaseController):
                             
                     if (date_array[0] not in address_dict):
                             address_dict[date_array[0]] = {date_array[1] : {date_array[2] : self.findHits(address="%s %s %s" % (address_dict['Property Address'], address_dict['City'], address_dict['State'] ), zipcode=address_dict['Zip'])}}
+                            self.flag_for_change[filename] += 1
                     
                     elif (date_array[1] not in address_dict[date_array[0]]):
                             address_dict[date_array[0]][date_array[1]] = { date_array[2]: self.findHits(address="%s %s %s" % (address_dict['Property Address'], address_dict['City'], address_dict['State'] ), zipcode=address_dict['Zip'])}
+                            self.flag_for_change[filename] += 1
                             
                     elif (date_array[2] not in address_dict[date_array[0]][date_array[1]]):
                             address_dict[date_array[0]][date_array[1]][date_array[2]] = self.findHits(address="%s %s %s" % (address_dict['Property Address'], address_dict['City'], address_dict['State'] ), zipcode=address_dict['Zip'])
+                            self.flag_for_change[filename] += 1
     
-                                
-                    output = open(address_file, 'wb')
-                    pickle.dump(address_dict, output)
-                    output.close()
                     
-                    x = []
-                    y = []
+                    if self.flag_for_change[filename] != 0:            
+                        output = open(address_file, 'wb')
+                        pickle.dump(address_dict, output)
+                        output.close()
                     
-                    for month in address_dict[date_array[0]].keys():
-                        for date in address_dict[date_array[0]][month].keys():
-                            x.append(datetime.datetime(year=int(date_array[0]), month=int(month), day=int(date)))
-                            y.append(address_dict[date_array[0]][month][date])
+                        x = []
+                        y = []
+                    
+                        for month in address_dict[date_array[0]].keys():
+                            for date in address_dict[date_array[0]][month].keys():
+                                x.append(datetime.datetime(year=int(date_array[0]), month=int(month), day=int(date)))
+                                y.append(address_dict[date_array[0]][month][date])
                         
-                    data = Data([
-                        Scatter(
-                             x=x,
-                             y=y
-                             )
-                    ])           
+                        data = Data([
+                                     Scatter(
+                                             x=x,
+                                             y=y
+                                             )
+                                     ])           
                 #py.plot(data, filename='%s/%s.png' % (self.image_location, address_file))
-                    py.image.save_as({'data': data}, '%s/%s.png' % (self.image_location, os.path.basename(address_file)))
+                        py.image.save_as({'data': data}, '%s/%s.png' % (self.image_location, os.path.basename(address_file)))
                 
-                    x = []
-                    y = []
+                        x = []
+                        y = []
                     
-                    address_dict = {}
-                    self.flag_for_change[filename] += 1
+                        address_dict = {}
+                        self.flag_for_change[filename] += 1
                     
         return None
     
@@ -167,8 +171,9 @@ class ViewController(BaseController):
         
     def readAddressesDict(self):
         self.return_dict = {}
+        
         for xlfilename in os.listdir(self.input_location):
-            pklFilename = open("%s/%s" %(self.output_location,xlfilename.replace(".xlsx", ".data")), 'wb')
+            pklFilename = open("%s/%s" %(self.output_location,xlfilename.replace(".xlsx", ".data")), 'a')
             filename = "%s/%s" % (self.output_location, xlfilename.replace(".xlsx", ""))
             
             # If some data has changed in the address files the self.flag_for_change[xlfilename] is set to 1
@@ -183,7 +188,8 @@ class ViewController(BaseController):
                     pkl_file.close()
                 
                 pickle.dump(self.final_dict, pklFilename )
-                pklFilename.close()
+                
+            pklFilename.close()
             
             
             pklFilename = open("%s/%s" %(self.output_location,xlfilename.replace(".xlsx", ".data")), 'rb')
