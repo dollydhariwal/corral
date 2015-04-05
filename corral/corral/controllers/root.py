@@ -9,6 +9,7 @@ from corral.lib.base import BaseController
 from corral.controllers.error import ErrorController
 from corral.controllers.locateAddresses import AddressController, SelectAddressesForm
 from corral.controllers.getComps import CompController, CompAddressForm
+from corral.controllers.getViews import ViewController
 
 __all__ = ['RootController']
 
@@ -46,6 +47,14 @@ class RootController(BaseController):
             return dict(page='getComps', kw=kw, form=CompAddressForm)
         else:
             return dict(page='getComps', kw=kw, form=CompAddressForm)
+        
+    @expose('corral.templates.getViews')
+    def getViews(self, **kw):
+        """Handle the getViews-page."""
+        ViewController().readExcelInput()
+        kw = ViewController().readAddressesDict()
+        
+        return dict(page='getViews', kw=kw)
         
     @expose('corral.templates.locateAddresses')
     def locateAddresses(self):
