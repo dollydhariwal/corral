@@ -51,8 +51,9 @@ class RootController(BaseController):
     @expose('corral.templates.getViews')
     def getViews(self, **kw):
         """Handle the getViews-page."""
-        ViewController().readExcelInput()
-        kw = ViewController().readAddressesDict()
+        view = ViewController()
+        view.readExcelInput()
+        kw = view.readAddressesDict()
         
         return dict(page='getViews', kw=kw)
         
