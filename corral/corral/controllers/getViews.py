@@ -40,7 +40,7 @@ class ViewController(BaseController):
         self.input_location = "/home/vipul/corral/corral/exceldata"
         self.output_location = "/home/vipul/corral/corral/excelresults"
         self.image_location = "/home/vipul/corral/corral/corral/public/resultimages"
-        py.sign_in('ddhariwal','p4d7b3t22s')
+        py.sign_in('ddhariwal','9nnxcdskrt')
         self.final_dict = {}
         self.flag_for_change = {}
         
@@ -145,8 +145,9 @@ class ViewController(BaseController):
                         x = []
                         y = []
                     
+                        
                         for month in address_dict[date_array[0]].keys():
-                            for date in address_dict[date_array[0]][month].keys():
+                            for date in sorted(address_dict[date_array[0]][month].keys()):
                                 x.append(datetime.datetime(year=int(date_array[0]), month=int(month), day=int(date)))
                                 y.append(address_dict[date_array[0]][month][date])
                         
@@ -157,7 +158,12 @@ class ViewController(BaseController):
                                              )
                                      ])           
                 #py.plot(data, filename='%s/%s.png' % (self.image_location, address_file))
-                        py.image.save_as({'data': data}, '%s/%s.png' % (self.image_location, os.path.basename(address_file)))
+                
+                        try:
+                            py.image.save_as({'data': data}, '%s/%s.png' % (self.image_location, os.path.basename(address_file)))
+                        #py.plot(data, filename="test")
+                        except:
+                            pass
                 
                         x = []
                         y = []

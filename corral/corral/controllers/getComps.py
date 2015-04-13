@@ -51,16 +51,23 @@ class CompController(BaseController):
        
     def findComps(self, address=None, zipcode=None):
         zpid = self.getPropertyId(address=address, zipcode=zipcode)
-        page = urllib2.urlopen("%s/GetDeepComps.htm?zws-id=%s&zpid=%s&count=10" % (self._url,self._privateToken,zpid)).read()
+        page = urllib2.urlopen("%s/GetDeepComps.htm?zws-id=%s&zpid=%s&count=25" % (self._url,self._privateToken,zpid)).read()
         root = ET.fromstring(page)
         propertytDict = {}
+        scoreDict = {}
         for comp in root.iter('comp'):
             address = "%s" % ( comp.find('address').find('street').text)
             zip = comp.find('address').find('zipcode').text
             price = comp.find('lastSoldPrice').text
             updated = comp.find('lastSoldDate').text
-            propertytDict[comp.find('zpid').text] = "%s %s      price: %s         last-updated: %s" % (address, zip,price,updated )
-        return propertytDict 
+            propertytDict[comp.find('zpid').text] = "%s %s      price: %s         last-updated: %s | score: %s " % (address, zip,price,updated, comp.get('score') )
+            
+            try:
+                scoreDict[comp.get('score')].append(propertytDict[comp.find('zpid').text])
+            except: 
+                scoreDict[comp.get('score')] = [propertytDict[comp.find('zpid').text]]
+                
+        return scoreDict 
     
     def getComps(self,**kw):
         return redirect(url(base_url='/getComps'), params=kw)

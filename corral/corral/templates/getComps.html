@@ -23,10 +23,11 @@
       <?python
       	addressArray = []
       	
-      	for key, value in kw.items():
+      	for key,value in kw.items():
       		try:
-      			for zpid,address in value.items():
-      				addressArray.append(address) 
+      			for score in sorted(value.keys()):
+      				for address in value[score]:
+      					addressArray.append(address) 
       		except:
       			pass
       ?>
@@ -34,6 +35,7 @@
 		<span py:if="kw">
       		<ul>
       			<li py:for="address in addressArray">
+      				<br></br>
       				<div>$address</div>
       			</li>
      	 	</ul>
