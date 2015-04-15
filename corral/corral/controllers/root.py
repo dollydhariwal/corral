@@ -10,6 +10,8 @@ from corral.controllers.error import ErrorController
 from corral.controllers.locateAddresses import AddressController, SelectAddressesForm
 from corral.controllers.getComps import CompController, CompAddressForm
 from corral.controllers.getViews import ViewController
+from corral.controllers.project import ProjectController
+from corral.controllers.salesProject import postAdForm,trackPropsForm
 
 __all__ = ['RootController']
 
@@ -44,9 +46,8 @@ class RootController(BaseController):
         """Handle the getComps-page."""
         if kw:
             kw['result'] = CompController().findComps(address=kw['address'],zipcode=kw['zipcode'])
-            return dict(page='getComps', kw=kw, form=CompAddressForm)
-        else:
-            return dict(page='getComps', kw=kw, form=CompAddressForm)
+         
+        return dict(page='getComps', kw=kw, form=CompAddressForm)
         
     @expose('corral.templates.getViews')
     def getViews(self, **kw):
@@ -56,7 +57,29 @@ class RootController(BaseController):
         kw = view.readAddressesDict()
         
         return dict(page='getViews', kw=kw)
+    
+    @expose('corral.templates.salesProject')
+    def salesProject(self, **kw):
+        """Handle the sales project-page."""
+        if kw:
+            return dict(page='salesProject', kw=kw, projectList=None, postAdform=postAdForm, trackPropsform=trackPropsForm )
+        else:
+            project = ProjectController()
+            projectList = project.listProjects()
         
+            return dict(page='salesProject', kw=None, projectList=projectList, postAdform=postAdForm, trackPropsform=trackPropsForm )
+        
+    @expose('corral.templates.postAds')
+    def postAds(self, **kw):
+        """Handle the posting of Ads."""
+        if kw:
+            return dict(page='postAds', kw=kw, projectList=None, postAdform=postAdForm, trackPropsform=trackPropsForm )
+        else:
+            project = ProjectController()
+            projectList = project.listProjects()
+        
+            return dict(page='postAds', kw=None, projectList=projectList, postAdform=postAdForm, trackPropsform=trackPropsForm )
+       
     @expose('corral.templates.locateAddresses')
     def locateAddresses(self):
         """Handle the 'localteAddresses' page."""
