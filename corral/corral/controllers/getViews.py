@@ -99,6 +99,7 @@ class ViewController(BaseController):
              
             for row in range(sheet.nrows):
                 address_file = '%s/%s/address%s.pkl' % (self.output_location, filename.replace(".xlsx",""), row)
+                self.flag_for_change[filename] = 0
                 
                 if not os.path.exists(address_file):
                     address_dict['id']=os.path.basename(address_file).replace("address", "").replace(".pkl", "")
@@ -168,8 +169,8 @@ class ViewController(BaseController):
                         x = []
                         y = []
                     
-                        address_dict = {}
-                        self.flag_for_change[filename] += 1
+                address_dict = {}
+                
                     
         return None
     

@@ -22,12 +22,12 @@ from corral.controllers.project import ProjectController
 
 
 
-__all__ = ['PostAdsController']
+__all__ = ['TrackPropsController']
 
 
-class PostAdsController(BaseController):
+class TrackPropsController(BaseController):
     """
-    The PostAds Controller for the corral Application
+    The Track Props Controller for the corral Application
     """
     def __init__(self,project=None):
         self.project = project
@@ -48,12 +48,11 @@ class selectProps(forms.CheckBox):
     value = True
     name = "property"
         
-                
-  
-class postForm(forms.SubmitButton):
-        #class child(forms.TableForm):
-        type = "submit"
-        value = "Post Ads"          
+class trackPropsForm(forms.SubmitButton):
+    #class child(forms.TableForm):
+    type = "submit"
+    value = "Track Properties"                
+    
                 
         
             

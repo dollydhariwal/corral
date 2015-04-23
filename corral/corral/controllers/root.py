@@ -11,7 +11,11 @@ from corral.controllers.locateAddresses import AddressController, SelectAddresse
 from corral.controllers.getComps import CompController, CompAddressForm
 from corral.controllers.getViews import ViewController
 from corral.controllers.project import ProjectController
+from corral.controllers.postAds import PostAdsController, selectProps, postForm
+from corral.controllers.trackProps import TrackPropsController, trackPropsForm
 from corral.controllers.salesProject import postAdForm,trackPropsForm
+from corral.controllers.plot import PlotController
+from corral.controllers.post import PostController
 
 __all__ = ['RootController']
 
@@ -62,7 +66,7 @@ class RootController(BaseController):
     def salesProject(self, **kw):
         """Handle the sales project-page."""
         if kw:
-            return dict(page='salesProject', kw=kw, projectList=None, postAdform=postAdForm, trackPropsform=trackPropsForm )
+            return dict(page='postAds', kw=kw )
         else:
             project = ProjectController()
             projectList = project.listProjects()
@@ -72,14 +76,46 @@ class RootController(BaseController):
     @expose('corral.templates.postAds')
     def postAds(self, **kw):
         """Handle the posting of Ads."""
-        if kw:
-            return dict(page='postAds', kw=kw, projectList=None, postAdform=postAdForm, trackPropsform=trackPropsForm )
-        else:
-            project = ProjectController()
-            projectList = project.listProjects()
         
-            return dict(page='postAds', kw=None, projectList=projectList, postAdform=postAdForm, trackPropsform=trackPropsForm )
-       
+        for key in kw.keys():
+            project = key
+            kw = PostAdsController(key).readProject()
+            
+            
+        return dict(page='postAds', kw=kw, project=project, selectProps=selectProps, postForm=postForm)
+    
+    
+    @expose('corral.templates.trackProps')
+    def trackProps(self, **kw):
+        """Handle the tracking of the props."""
+        
+        for key in kw.keys():
+            project = key
+            kw = TrackPropsController(key).readProject()
+        
+        projectName =project.replace(".xlsx", "")   
+        return dict(page='trackProps', kw=kw, project=project, projectName=projectName, trackPropsForm=trackPropsForm)
+    
+    
+    @expose('corral.templates.plot')
+    def plot(self, **kw):
+        """Handle the plotting of the graph."""
+        prop_dict = {}
+        
+        plotObj = PlotController()
+        prop_dict = plotObj.plotGraph(kw['project'], list(kw['property']))
+        
+        projectName =  kw['project'].replace(".xlsx", "")  
+        return dict(page='plot', kw=kw, projectName=projectName, prop_dict=prop_dict)
+    
+    @expose('corral.templates.post')
+    def post(self, **kw):
+        """Handle the posting of Ads."""
+        postObj = PostController()
+        postObj.createXML(kw['project'], list(kw['property']))
+        
+        return None
+              
     @expose('corral.templates.locateAddresses')
     def locateAddresses(self):
         """Handle the 'localteAddresses' page."""

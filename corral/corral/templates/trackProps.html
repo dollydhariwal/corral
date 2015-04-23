@@ -24,21 +24,21 @@
     	  		addressDict[kw[key][key1]['id']] = addressString 
     	  			
         ?>
-        <form action="${tg.url('/post')}">
+        <form action="${tg.url('/plot')}">
         	<input type="checkbox" id='toggle' onchange="togglecb(this,'cbg1[]')">Toggle All </input><br/><br/>
         	<input type="hidden" name="project" value="$project"></input>
   			<tr py:for="x, value in addressDict.items()" >
   				<td><input type="checkbox" name="property" value="${x}"></input></td>
   				
-  				<td>${value}</td>
+  				<td><a href="${tg.url('/resultimages/' + projectName + '-address' + str(x) + '.pkl.png')}">${value}</a></td>
   			</tr>
   			<tr>
   				<td></td>
   				<td></td>
-  				<td>${postForm.display()}</td>
+  				<td>${trackPropsForm.display()}</td>
   			</tr>
   		</form>
-	  </table>
+  	  </table>
  	</div>
   </div>
 </body>

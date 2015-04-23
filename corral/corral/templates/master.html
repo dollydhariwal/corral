@@ -34,9 +34,10 @@
         <li class="${('', 'active')[value_of('page') == 'about']}"><a href="${tg.url('/about')}">About</a></li>
         <li class="${('', 'active')[value_of('page') == 'locateAddresses']}"><a href="${tg.url('/locateAddresses')}">Locate Addresses</a></li>
         <li class="${('', 'active')[value_of('page') == 'getComps']}"><a href="${tg.url('/getComps')}">Get Comparables</a></li>
-        <li class="${('', 'active')[value_of('page') == 'getViews']}"><a href="${tg.url('/getViews')}">Get Views</a></li>
+        <li class="${('', 'active')[value_of('page') == 'salesProject']}"><a href="${tg.url('/salesProject')}">Sales Project</a></li>
       </ul>
-
+      
+     
       <ul py:if="tg.auth_stack_enabled" class="nav navbar-nav navbar-right">
         <li py:if="not request.identity"><a href="${tg.url('/login')}">Login</a></li>
         <li py:if="request.identity"><a href="${tg.url('/logout_handler')}">Logout</a></li>
@@ -73,6 +74,7 @@
   <script src="${tg.url('/javascript/bootstrap.min.js')}"></script>
   <script src="${tg.url('/javascript/key.js')}"></script>
   <script src="${tg.url('/javascript/geocoder.js')}"></script>
+  <script src="${tg.url('/javascript/toggle.js')}"></script>
   
 </body>
 </html>

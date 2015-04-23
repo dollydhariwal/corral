@@ -100,7 +100,7 @@ function DefineGeocodingKey() {
 	geocoding_key = (k) ? k : ''; // global
 	// alert ('source = '+source+', key = '+geocoding_key); // for debugging
 	keyless_limit = 5 ;
-	lookup_limit = 10; // global
+	lookup_limit = 120; // global
 }
 
 function ChangeSource() {
@@ -761,30 +761,41 @@ function OutputRow(d,coords) {
 			lat = d.latitude; lon = d.longitude; name = d.gv_name; desc = d.gv_desc; color = added_color;
 		}
 		
+		var contentString = '<div id="content">'+
+      							'<div id="bodyContent">'+
+      								'<p>' + d.gv_name + '</p>'+
+						   		'</div>'+
+      						'</div>';
+		
+		 var infowindow = new google.maps.InfoWindow({
+      		content: contentString
+		 });
+		 
 		var desc_on_map = (desc != '' && desc != '-') ? desc : '';
 		// alert('value of iframe ' + iframe_ok['google'] + 'value of typeof ' + typeof(lat) + ' ' + typeof(lon) + 'lat and lon ' + lat + ' ' + lon);
 		if (source == 'google' && typeof(lat) != 'undefined' && typeof(lon) != 'undefined' && (lat != 0 || lon != 0)) {
 			map.setCenter(coords);
       		var marker = new google.maps.Marker({
             		map: map,
-            		position: coords
+            		position: coords,
+            		title: d.gv_name
         	});
 			// $('google_map_iframe').contentWindow.GV_Draw_Marker({'lat':lat,'lon':lon,'name':name,'desc':desc_on_map,'label':name,'color':color});
 			// $('google_map_iframe').contentWindow.GV_Autozoom({margin:30},'wpts');
 			
-		} else {
-			// draw a map from other sources?
-		}
-
+		} 
 		
-		
+		google.maps.event.addListener(marker, 'click', function() {
+    		infowindow.open(map,marker);
+  		});
+  		
 		if (si[source].firstcount < 1){
 		
 			
 			// Add circle overlay and bind to marker
 			var circle = new google.maps.Circle({
  				 map: map,
-  				 radius: 1609,    // 10 miles in metres
+  				 radius: 1609,    // 1 miles in metres
   				 fillColor: '#CC6600'
 			});
 			circle.bindTo('center', marker, 'position');

@@ -9,17 +9,20 @@
 </head>
 
 <body>
-	<div class="row">
-    <div class="col-xs-12">
+	<div class="row background">
+    <div class="col-xs-12 ">
       <h2>List of sales projects</h2>
       
   	  <span py:if="projectList">
   	  	<table border="0" cellpadding="5" style="width:50%">
       		<tr py:for="project in projectList" >
-      			<form name="${project}" action="${tg.url('/salesProject')}" method="POST">
+      			<form name="${project}" action="${tg.url('/postAds')}" method="POST">
       				<input type="hidden" name="$project"></input>
   					<td>$project</td>
   					<td>${postAdform.display()}</td>
+  				</form>
+  				<form name="${project}" action="${tg.url('/trackProps')}" method="POST">
+      				<input type="hidden" name="$project"></input>
   					<td>${trackPropsform.display()}</td>
   				</form>
   			</tr>
