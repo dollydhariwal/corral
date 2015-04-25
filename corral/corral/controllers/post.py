@@ -14,6 +14,7 @@ import cPickle as pickle
 import plotly.plotly as py
 from plotly.graph_objs import *
 from corral.controllers.project import ProjectController
+from corral.lib.dropbox import DropboxController
 
 
 #from DNS.Type import NULL
@@ -33,6 +34,7 @@ class PostController(BaseController):
         self.xml_location = ProjectController()._getXMLLocation()
         self.output_xml_location = ProjectController()._getOutputXMLLocation()
         self.output_location = ProjectController()._getOutputLocation()
+        self.photos_location = ProjectController()._getPhotosLocation()
         self.startTag = "<![CDATA["
         self.endTag = "]]>"
         
@@ -41,6 +43,7 @@ class PostController(BaseController):
         descStr = "Email: info\@4windre.com\nPhone:4045009192\nPlease Call to the above mentioned mobile number only for further details.\n"
         os.system("cp %s/Properties.xml.tl %s/%s/%s.xml" % (self.xml_location,self.output_xml_location,project.replace(".xlsx",""),project.replace(".xlsx","")))
         projectXMLFile = "%s/%s/%s.xml" % (self.output_xml_location,project.replace(".xlsx",""),project.replace(".xlsx",""))
+        
         
         ##os.system("echo '<properties>' >> %s" %(projectXMLFile))
                
@@ -51,6 +54,7 @@ class PostController(BaseController):
             address_dict = pickle.load(output)
             output.close()
             dont_include = 0
+            pictureString = ""
             
             os.system("mkdir %s/%s; cp %s/TFF.xml.tl %s/%s/%s-address%s.xml" % (self.output_xml_location,project.replace(".xlsx",""),self.xml_location, self.output_xml_location,project.replace(".xlsx",""), project.replace(".xlsx",""), key))
             xmlFile = "%s/%s/%s-address%s.xml" %(self.output_xml_location,project.replace(".xlsx",""), project.replace(".xlsx",""), key)
@@ -94,7 +98,17 @@ class PostController(BaseController):
                 if column == "Lot %Acre":
                     os.system("sed -i 's/XX_LOT_SIZE_XX/%s/' %s" % (formalvalue, xmlFile))
                 if column == "Pictures Link":
-                    os.system("sed -i 's/XX_PICTURE_URL_XX/%s/' %s" % (formalvalue, xmlFile))
+                    if value:
+                        destDir = "%s/%s-%s" % (self.photos_location, project.replace(".xlsx",""), key)
+                        photos_array = DropboxController().download(value, destDir)
+                        seq_num = 1
+                        
+                        if photos_array:
+                            for photo in photos_array:
+                                pictureString = "%s\<picture\>\<picture-url>%s\<\/picture-url\>\<picture-seq-number\>%s\<\/picture-seq-number\><\/picture>" % (pictureString, photo.replace("/","\/"), seq_num)
+                                seq_num += 1
+                                                       
+                        os.system("sed -i 's/XX_PICTURE_XX/%s/' %s" % (pictureString, xmlFile))
                 if column == "Year Built":
                     os.system("sed -i 's/XX_YEAR_BUILT_XX/%s/' %s" % (formalvalue, xmlFile))
                 if column == "Annual HOA":
@@ -105,6 +119,7 @@ class PostController(BaseController):
               
             
             os.system("sed -i 's/XX_.*_XX//' %s" % (xmlFile))
+            
             
             if dont_include == 0:
                 os.system("cat %s >> %s" %(xmlFile,projectXMLFile))
