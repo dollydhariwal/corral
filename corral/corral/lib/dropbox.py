@@ -16,7 +16,7 @@ class DropboxController(BaseController):
 
     """
     def __init__(self):
-	self._patternList = ["JPG","jpeg", "png", "jpg"]
+	self._patternList = ["JPG","jpeg", "png", "jpg", "bmp"]
 	
     def download(self,link, destDir):
 	photos_array = []
@@ -32,6 +32,6 @@ class DropboxController(BaseController):
 	
 	for pattern in self._patternList:
 		for photo in glob.glob("%s/*.%s" % (destDir, pattern)):
-			photos_array.append("http://allcorral.com/photos/%s/%s" %(os.path.basename(destDir),os.path.basename(photo)))
+			photos_array.append("http://4windsre.com/photos/%s/%s" %(os.path.basename(destDir),os.path.basename(photo)))
 	
 	return photos_array

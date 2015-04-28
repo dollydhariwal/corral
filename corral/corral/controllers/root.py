@@ -106,7 +106,7 @@ class RootController(BaseController):
         prop_dict = plotObj.plotGraph(kw['project'], list(kw['property']))
         
         projectName =  kw['project'].replace(".xlsx", "")  
-        return dict(page='plot', kw=kw, projectName=projectName, prop_dict=prop_dict)
+        return dict(page='plot/unique', kw=kw, projectName=projectName, prop_dict=prop_dict)
     
     @expose('corral.templates.post')
     def post(self, **kw):
@@ -124,5 +124,18 @@ class RootController(BaseController):
     @expose()
     def locate(self,**kw):
         return AddressController().locate(**kw)
+    
+    @expose('corral.public.graphs')
+    def graphs(self):
+        return None
+    
+    @expose('corral.public.xmlfiles')
+    def xmlfiles(self):
+        return None
+    
+    @expose('corral.public.photos')
+    def photos(self):
+        return None
+    
 
     
