@@ -38,6 +38,7 @@ class ProjectController(BaseController):
         self.image_location = "/home/vipul/corral/corral/corral/public/resultimages"
         self.xml_location = "/home/vipul/corral/corral/corral/public/xmltemplates"
         self.output_xml_location = "/home/vipul/corral/corral/corral/public/xmlfiles"
+        self.photos_location = "/home/vipul/corral/corral/corral/public/photos"
         self._url = 'http://www.zillow.com/webservice'
         self._privateToken = 'X1-ZWz1azdtprntor_8xo7s'
         py.sign_in('ddhariwal','9nnxcdskrt')
@@ -67,6 +68,9 @@ class ProjectController(BaseController):
     
     def _getOutputXMLLocation(self):
         return self.output_xml_location
+    
+    def _getPhotosLocation(self):
+        return self.photos_location
     
     def listProjects(self):
         projectArray = []
