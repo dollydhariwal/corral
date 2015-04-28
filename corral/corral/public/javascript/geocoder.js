@@ -92,6 +92,15 @@ function InitializeGeocoder() {
 	if ($('mapquestopen_key_box') && $('mapquestopen_key_box').value == '' && self.mapquestopen_key && mapquestopen_key.match(/\w+/)) { $('mapquestopen_key_box').value = mapquestopen_key; }
 }
 
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 function DefineGeocodingKey() {
 	var source = 'google';
 	if (!source) { return false; }
@@ -547,6 +556,7 @@ function GeocodeCallback () {
 				var try_again = false;
 				
 				if (status && status == google.maps.ElevationStatus.OK && results && results[0] && results[0].elevation) {
+					
 					if (results[0].location) {
 						d.latitude = RoundNumber(results[0].location.lat(),7);
 						d.longitude = RoundNumber(results[0].location.lng(),7);
@@ -632,6 +642,7 @@ function GeocodeCallback () {
 				var try_again = false;
 				
 				if (status && status == google.maps.GeocoderStatus.OK && results && results[0] && results[0].geometry && results[0].geometry.location) {
+					sleep(600)
 					var coords = results[0].geometry.location;
 					d.latitude = parseFloat(results[0].geometry.location.lat().toFixed(7));
 					d.longitude = parseFloat(results[0].geometry.location.lng().toFixed(7));
