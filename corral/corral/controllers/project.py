@@ -33,11 +33,11 @@ class ProjectController(BaseController):
         of the projects
         location: location of excel sheet
         """
-        self.input_location = "/home/vipul/corral/corral/exceldata"
-        self.output_location = "/home/vipul/corral/corral/excelresults"
-        self.image_location = "/home/vipul/corral/corral/corral/public/resultimages"
-        self.xml_location = "/home/vipul/corral/corral/corral/public/xmltemplates"
-        self.output_xml_location = "/home/vipul/corral/corral/corral/public/xmlfiles"
+        self.input_location = "/home/vjain/4windsre/corral/corral/exceldata"
+        self.output_location = "/home/vjain/4windsre/corral/corral/excelresults"
+        self.image_location = "/home/vjain/4windsre/corral/corral/corral/public/graphs"
+        self.xml_location = "/home/vjain/4windsre/corral/corral/corral/public/xmltemplates"
+        self.output_xml_location = "/home/vjain/4windsre/corral/corral/corral/public/xmlfiles"
         self._url = 'http://www.zillow.com/webservice'
         self._privateToken = 'X1-ZWz1azdtprntor_8xo7s'
         py.sign_in('ddhariwal','9nnxcdskrt')
