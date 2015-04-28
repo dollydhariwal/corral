@@ -105,3 +105,21 @@ div#search{
 	color: white;
 
 }
+
+#re_links ul li a{
+	font-weight: bold;
+	text-decoration: none;
+	color: #eff;
+	padding-right: 10px;
+}
+
+
+#main_content {
+	margin: 0 auto 0 auto;
+	color: black;
+	font-size: 127%;
+	background-color: white;
+	background-image: tg.url('realestate.jpg') 
+	padding: 10px;
+	vertical-align: top;
+}
