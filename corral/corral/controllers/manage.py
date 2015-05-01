@@ -36,7 +36,6 @@ class ManageController(BaseController):
     def createKase(self, kaseName):    
         highriseObj = HighriseController(self._url, self._token)
         result = highriseObj.createKase(kaseName)
-        
         return result  
   
 class statusForm(forms.SubmitButton):
