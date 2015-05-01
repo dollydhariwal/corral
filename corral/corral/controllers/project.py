@@ -35,7 +35,7 @@ class ProjectController(BaseController):
         """
         self.input_location = "/home/vipul/corral/corral/exceldata"
         self.output_location = "/home/vipul/corral/corral/excelresults"
-        self.image_location = "/home/vipul/corral/corral/corral/public/resultimages"
+        self.image_location = "/home/vipul/corral/corral/corral/public/graphs"
         self.xml_location = "/home/vipul/corral/corral/corral/public/xmltemplates"
         self.output_xml_location = "/home/vipul/corral/corral/corral/public/xmlfiles"
         self.photos_location = "/home/vipul/corral/corral/corral/public/photos"

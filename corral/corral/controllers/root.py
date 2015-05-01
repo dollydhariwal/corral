@@ -14,10 +14,13 @@ from corral.controllers.project import ProjectController
 from corral.controllers.postAds import PostAdsController, selectProps, postForm
 from corral.controllers.trackProps import TrackPropsController, trackPropsForm
 from corral.controllers.salesProject import postAdForm,trackPropsForm
+from corral.controllers.generateLeads import postAdForm,postAdMLSForm, GenerateLeadsController
+from corral.controllers.postLeads import postForm,postMLSForm
 from corral.controllers.manageLeads import manageForm
 from corral.controllers.manage import ManageController, statusForm, emailForm
 from corral.controllers.plot import PlotController
 from corral.controllers.post import PostController
+from corral.controllers.postAdsMLS import PostMLSController
 
 __all__ = ['RootController']
 
@@ -55,14 +58,17 @@ class RootController(BaseController):
          
         return dict(page='getComps', kw=kw, form=CompAddressForm)
         
-    @expose('corral.templates.getViews')
-    def getViews(self, **kw):
-        """Handle the getViews-page."""
-        view = ViewController()
-        view.readExcelInput()
-        kw = view.readAddressesDict()
+    @expose('corral.templates.generateLeads')
+    def generateLeads(self, **kw):
+        """Handle the generate leads -page."""
+        if kw:
+            return dict(page='postAds', kw=kw )
+        else:
+            project = ProjectController()
+            projectList = project.listProjects()
         
-        return dict(page='getViews', kw=kw)
+            return dict(page='generateLeads', kw=None, projectList=projectList, postAdform=postAdForm, postAdMLSform=postAdMLSForm )
+    
     
     @expose('corral.templates.salesProject')
     def salesProject(self, **kw):
@@ -97,6 +103,17 @@ class RootController(BaseController):
                     
         return dict(page='postAds', kw=kw, project=project, selectProps=selectProps, postForm=postForm)
     
+    
+    @expose('corral.templates.postleads')
+    def postLeads(self, **kw):
+        """Handle the posting of Ads."""
+        
+        for key in kw.keys():
+            project = key
+            kw = PostAdsController(key).readProject()
+            
+                    
+        return dict(page='postleads', kw=kw, project=project, selectProps=selectProps, postForm=postForm, postMLSForm=postMLSForm)
     
     @expose('corral.templates.manage')
     def manage(self, **kw):
@@ -133,10 +150,23 @@ class RootController(BaseController):
         prop_dict = {}
         
         plotObj = PlotController()
+        print kw
         prop_dict = plotObj.plotGraph(kw['project'], list(kw['property']))
         
         projectName =  kw['project'].replace(".xlsx", "")  
-        return dict(page='plot/unique', kw=kw, projectName=projectName, prop_dict=prop_dict)
+        return dict(page='plot', kw=kw, projectName=projectName, prop_dict=prop_dict)
+    
+    
+    @expose('corral.templates.postAdsMLS')
+    def postAdsMLS(self, **kw):
+        """Handle the posting of Ads."""
+        
+        postObj = PostMLSController()
+        propertyStatus = postObj.createXML(kw['project'], list(kw['property']))
+        
+        projectName = kw['project'].replace(".xlsx","")
+        
+        return dict(page='postAdsMLS', kw=kw, propertyStatus=propertyStatus, projectName=projectName)
     
     @expose('corral.templates.post')
     def post(self, **kw):

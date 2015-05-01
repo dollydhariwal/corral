@@ -26,7 +26,7 @@ from corral.lib.dropbox import DropboxController
 __all__ = ['PostController']
 
 
-class PostController(BaseController):
+class PostMLSController(BaseController):
     """
     The Plot Controller for the corral Application
     """
@@ -126,12 +126,12 @@ class PostController(BaseController):
             os.system("sed -i 's/XX_.*_XX//' %s" % (xmlFile))
             
             finalAddress = "%s %s %s" % (address,city, zip)
-            
-            if dont_include == 0:
-                propertyStatus['posted'].append(finalAddress)
+            propertyId = ProjectController().getPropertyId(address="%s %s" %(address, city), zipcode=zip)
+            if (dont_include == 0) and(propertyId != "None"):
+                propertyStatus['posted'].append({finalAddress:propertyId})
                 os.system("cat %s >> %s" %(xmlFile,projectXMLFile))
             else:
-                propertyStatus['not-posted'].append(finalAddress)
+                propertyStatus['not-posted'].append({finalAddress:propertyId})
                 
         os.system("echo '</properties>' >> %s" %(projectXMLFile))
                 

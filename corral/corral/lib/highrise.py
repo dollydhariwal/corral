@@ -49,12 +49,12 @@ class HighriseController(BaseController):
         print xml_string
         url = "%s/kases.xml" % self._url
         try:
-                req = urllib2.Request(url=url,
+            req = urllib2.Request(url=url,
                               data=xml_string,
                               headers={'Content-Type': 'application/xml'})
-                urllib2.urlopen(req)
+            urllib2.urlopen(req)
 
-                result = True
+            result = True
         except:
             result = False
 
