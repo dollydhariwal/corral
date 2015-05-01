@@ -14,6 +14,8 @@ from corral.controllers.project import ProjectController
 from corral.controllers.postAds import PostAdsController, selectProps, postForm
 from corral.controllers.trackProps import TrackPropsController, trackPropsForm
 from corral.controllers.salesProject import postAdForm,trackPropsForm
+from corral.controllers.manageLeads import manageForm
+from corral.controllers.manage import ManageController, statusForm, emailForm
 from corral.controllers.plot import PlotController
 from corral.controllers.post import PostController
 
@@ -73,6 +75,17 @@ class RootController(BaseController):
         
             return dict(page='salesProject', kw=None, projectList=projectList, postAdform=postAdForm, trackPropsform=trackPropsForm )
         
+    @expose('corral.templates.manageLeads')
+    def manageLeads(self, **kw):
+        """Handle the sales project-page."""
+        if kw:
+            return dict(page='manage', kw=kw )
+        else:
+            project = ProjectController()
+            projectList = project.listProjects()
+        
+            return dict(page='manageLeads', kw=None, projectList=projectList, manageform=manageForm )
+        
     @expose('corral.templates.postAds')
     def postAds(self, **kw):
         """Handle the posting of Ads."""
@@ -81,8 +94,25 @@ class RootController(BaseController):
             project = key
             kw = PostAdsController(key).readProject()
             
-            
+                    
         return dict(page='postAds', kw=kw, project=project, selectProps=selectProps, postForm=postForm)
+    
+    
+    @expose('corral.templates.manage')
+    def manage(self, **kw):
+        """Handle the posting of Ads."""
+        
+        for key in kw.keys():
+            project = key
+            kw = PostAdsController(key).readProject()
+            
+        projectName = project.replace(".xlsx","") 
+        
+        for key,value in kw[projectName].items():
+            addressString =  "%s %s %s | price: %s" % (kw[projectName][key]['Property Address'], kw[projectName][key]['State'], kw[projectName][key]['Zip'], kw[projectName][key]['Turnkey/Sales Price'])
+            result = ManageController().createKase(addressString)
+        
+        return dict(page='manage', kw=kw, project=project, statusform=statusForm, emailform=emailForm)
     
     
     @expose('corral.templates.trackProps')
