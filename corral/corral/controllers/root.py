@@ -92,27 +92,19 @@ class RootController(BaseController):
         
             return dict(page='manageLeads', kw=None, projectList=projectList, manageform=manageForm )
         
-    @expose('corral.templates.postAds')
-    def postAds(self, **kw):
+    @expose('corral.templates.post')
+    def post(self, **kw):
         """Handle the posting of Ads."""
-        
-        for key in kw.keys():
-            project = key
-            kw = PostAdsController(key).readProject()
-            
-                    
-        return dict(page='postAds', kw=kw, project=project, selectProps=selectProps, postForm=postForm)
+        return dict(page='post', kw=kw)
     
     
     @expose('corral.templates.postleads')
     def postLeads(self, **kw):
         """Handle the posting of Ads."""
-        
         for key in kw.keys():
             project = key
             kw = PostAdsController(key).readProject()
             
-                    
         return dict(page='postleads', kw=kw, project=project, selectProps=selectProps, postForm=postForm, postMLSForm=postMLSForm)
     
     @expose('corral.templates.manage')
@@ -160,22 +152,19 @@ class RootController(BaseController):
     @expose('corral.templates.postAdsMLS')
     def postAdsMLS(self, **kw):
         """Handle the posting of Ads."""
-        
+        print "I am in adsMLS"
+        print kw
         postObj = PostMLSController()
-        propertyStatus = postObj.createXML(kw['project'], list(kw['property']))
-        
         projectName = kw['project'].replace(".xlsx","")
         
-        return dict(page='postAdsMLS', kw=kw, propertyStatus=propertyStatus, projectName=projectName)
-    
-    @expose('corral.templates.post')
-    def post(self, **kw):
-        """Handle the posting of Ads."""
-        postObj = PostController()
-        postObj.createXML(kw['project'], list(kw['property']))
-        
-        return None
-              
+        if kw.has_key('noMLS'):
+            checkStatus = postObj.checkStatus(kw['project'], list(kw['property']))
+            return dict(page='post', kw=kw, projectName=projectName, checkStatus=checkStatus, propertyStatus=None)
+        else:
+            propertyStatus = postObj.createXML(kw['project'], list(kw['property']))
+            return dict(page='postAdsMLS', kw=kw, propertyStatus=propertyStatus, projectName=projectName, checkStatus=None)
+                
+                          
     @expose('corral.templates.locateAddresses')
     def locateAddresses(self):
         """Handle the 'localteAddresses' page."""

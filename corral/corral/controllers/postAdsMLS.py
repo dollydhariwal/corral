@@ -140,6 +140,49 @@ class PostMLSController(BaseController):
             
     
     
+    
+    def checkStatus(self,project,addressKeys):
+        propertyStatus = {'posted':[], 'not-posted': []}
+               
+        for key in addressKeys:
+            address_dict = {}
+            address_file = '%s/%s/address%s.pkl' % (self.output_location, project.replace(".xlsx",""), key)
+            output = open(address_file, 'rb')
+            address_dict = pickle.load(output)
+            output.close()
+            dont_include = 0
+                   
+                    
+            for column in address_dict.keys():
+                value = address_dict[column]
+                               
+                if column == "Property Address":
+                    if value == None:
+                        dont_include = 1
+                    address = value
+                    
+                if column == "Turnkey/Sales Price":
+                    if value == None or value == "" :
+                        dont_include = 1
+                if column == "City":
+                    if value == None:
+                        dont_include = 1
+                    city = value
+                if column == "Zip":
+                    if value == None:
+                        dont_include = 1
+                    zip = value
+                
+              
+            finalAddress = "%s %s %s" % (address,city, zip)
+            propertyId = ProjectController().getPropertyId(address="%s %s" %(address, city), zipcode=zip)
+            if (dont_include == 0) and(propertyId != "None"):
+                propertyStatus['posted'].append({finalAddress:propertyId})
+            else:
+                propertyStatus['not-posted'].append({finalAddress:propertyId})
+                
+                       
+        return propertyStatus       
         
         
            

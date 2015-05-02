@@ -24,26 +24,27 @@
     	  		addressDict[kw[key][key1]['id']] = addressString 
     	  			
         ?>
-        <form action="${tg.url('/postAdsMLS')}">
-        	<input type="checkbox" id='toggle' onchange="togglecb(this,'cbg1[]')">Toggle All </input><br/><br/>
-        	<input type="hidden" name="project" value="$project"></input>
-  			<tr py:for="x, value in addressDict.items()" >
-  				<td><input type="checkbox" name="property" value="${x}"></input></td>
+            <form action="${tg.url('/postAdsMLS')}">
+             	<input type="hidden" name="project" value="${project}"></input>
+           		<input type="checkbox" id='toggle' onchange="togglecb(this,'cbg1[]')">Toggle All </input><br/><br/>
+        		<tr py:for="x, value in addressDict.items()" >
+  					<td><input type="checkbox" name="property" value="${x}"></input></td>
   				
-  				<td>${value}</td>
-  			</tr>
+  					<td>${value}</td>
+  				</tr>
+  			
   			<tr>
   				<td></td>
   				<td></td>
-  				<form name="${project}" action="${tg.url('/postAdsMLS')}" method="POST">
-  				    <td>${postMLSForm.display()}</td>
-  				</form>
-  				<form name="${project}" action="${tg.url('/trackProps')}" method="POST">
-  				    <input type="hidden" name="project" value="$project"></input>
-      				<td>${postForm.display()}</td>
-  				</form>
+  				<td>
+  				    ${postForm.display()}
+  				</td>
+  				<td>
+        			  ${postMLSForm.display()}
+ 				</td>
   			</tr>
-  	    </form>
+  		  
+  	      </form>
 	  </table>
  	</div>
   </div>
