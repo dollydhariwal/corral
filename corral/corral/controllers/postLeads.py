@@ -53,12 +53,16 @@ class selectProps(forms.CheckBox):
 class postForm(forms.SubmitButton):
         #class child(forms.TableForm):
         type = "submit"
-        value = "Post Ads"  
+        value = "Post Ads" 
+        name = "noMLS"
+        
+       
         
 class postMLSForm(forms.SubmitButton):
         #class child(forms.TableForm):
         type = "submit"
-        value = "Post Ads with MLS listings"                  
+        value = "Post Ads with MLS listings"  
+        name = "MLS"                
                 
         
             
