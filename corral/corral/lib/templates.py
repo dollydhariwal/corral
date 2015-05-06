@@ -36,6 +36,7 @@ class KasesController(BaseController):
         """   
         self._kaseXml = '''
     <kase>
+	    <background>for sale</background>
 	    <name>%(name)s</name>
     </kase>'''
 

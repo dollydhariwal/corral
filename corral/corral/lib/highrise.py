@@ -39,6 +39,16 @@ class HighriseController(BaseController):
         urllib2.install_opener(self.opener)
 
 
+    def listKases(self):
+        kasesList = []
+        page = urllib2.urlopen("%s/kases.xml" % self._url).read()
+        root = ET.fromstring(page)
+
+        for kase in root.findall('kase'):
+		if kase.find('name').text is not None :
+       	        	kasesList.append(kase.find('name').text)
+
+	return kasesList
 
     def createKase(self, kaseName):
         xmlTemplate = KasesController()._getKaseTemplate()
@@ -48,15 +58,20 @@ class HighriseController(BaseController):
         xml_string = xmlTemplate%data
         print xml_string
         url = "%s/kases.xml" % self._url
-        try:
-            req = urllib2.Request(url=url,
-                              data=xml_string,
-                              headers={'Content-Type': 'application/xml'})
-            urllib2.urlopen(req)
 
-            result = True
-        except:
-            result = False
+	if str(kaseName) not in self.listKases():
+	        try:
+        	    req = urllib2.Request(url=url,
+                	      data=xml_string,
+                              headers={'Content-Type': 'application/xml'})
+	            urllib2.urlopen(req)
+
+        	    result = True
+	        except:
+        	    result = False
+
+	else:
+		result = False
 
         return result
 
