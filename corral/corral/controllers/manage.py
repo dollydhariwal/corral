@@ -29,8 +29,8 @@ class ManageController(BaseController):
     The Manage Controller for the corral Application
     """
     def __init__(self,project=None):
-        self._url = "https://organization223.highrisehq.com"
-        self._token = "77427d6a0fae05a6bd5a34df27221ab1"
+        self._url = "https://summitassetsgroup.highrisehq.com"
+        self._token = "a15393faf5222c1745f2e1a60a701eb0"
         
     
     def createKase(self, kaseName):    
