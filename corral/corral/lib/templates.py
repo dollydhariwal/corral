@@ -38,7 +38,7 @@ class KasesController(BaseController):
     <kase>
 	    <background>for sale</background>
 	    <name>%(name)s</name>
-    </kase>'''
+	</kase>'''
 
        
     def _getKaseTemplate(self):

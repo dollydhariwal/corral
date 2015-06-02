@@ -117,11 +117,14 @@ class RootController(BaseController):
             
         projectName = project.replace(".xlsx","") 
         
+        projectList = []
+        
         for key,value in kw[projectName].items():
             addressString =  "%s %s %s | price: %s" % (kw[projectName][key]['Property Address'], kw[projectName][key]['State'], kw[projectName][key]['Zip'], kw[projectName][key]['Turnkey/Sales Price'])
-            result = ManageController().createKase(addressString)
+            projectList.append(ManageController().createKase(addressString))
         
-        return dict(page='manage', kw=kw, project=project, statusform=statusForm, emailform=emailForm)
+        contactList = ManageController().listContacts()
+        return dict(page='manage', kw=kw, project=project, result=projectList, contactlist=contactList, statusform=statusForm, emailform=emailForm)
     
     
     @expose('corral.templates.trackProps')

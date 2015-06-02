@@ -26,7 +26,9 @@ class HighriseController(BaseController):
         self._url = '%s' % url
         self._privateToken = privateToken
         self._printFlag = True
+        self._defaultContact = {'name':"Support 4WindsRE", "email":"supportre@4windsre.com"}
         self._connection()
+        
        
 
        
@@ -38,17 +40,49 @@ class HighriseController(BaseController):
         self.opener = urllib2.build_opener(authhandler)
         urllib2.install_opener(self.opener)
 
+    def _getKasesList(self):
+        return self._kases
+    
+    def _getDefaultContact(self):
+        return self._defaultContact
 
-    def listKases(self):
+    def createKasesList(self):
         kasesList = []
+        contactList = []
         page = urllib2.urlopen("%s/kases.xml" % self._url).read()
         root = ET.fromstring(page)
 
         for kase in root.findall('kase'):
-		if kase.find('name').text is not None :
-       	        	kasesList.append(kase.find('name').text)
+            
+		    if kase.find('name').text is not None :
+                        contactList = []
+                        for parties in kase.findall('parties'):
+                            for party in parties.findall('party'):
+                                emailaddress = ""
+                                name = "%s %s" % (party.find('first-name').text, party.find('last-name').text)
+                                emailaddresses = "supportre@4windsre.com"
+                                for emailaddress in party.find('contact-data').find('email-addresses').findall('email-address'):
+                                    emailaddress = "%s, %s" % (emailaddresses,emailaddress.find('address').text )
+                            
+                                contactList.append({'name':name, 'email': emailaddress})
+                            
+                        kasesList.append({kase.find('name').text : {'status': kase.find('background').text, 'contact': contactList}})
 
 	return kasesList
+    
+    def createContactDict(self):
+        urllib2.install_opener(self.opener)
+        page = urllib2.urlopen("%s/people.xml" % self._url).read()
+        root = ET.fromstring(page)
+
+        contactDict = {}
+        for person in root.findall('person'):
+                name = "%s %s" % ( person.find('first-name').text, person.find('last-name').text)
+                contactDict[person.find('id').text] = name
+
+        return contactDict    
+    
+
 
     def createKase(self, kaseName):
         xmlTemplate = KasesController()._getKaseTemplate()
@@ -58,22 +92,38 @@ class HighriseController(BaseController):
         xml_string = xmlTemplate%data
         print xml_string
         url = "%s/kases.xml" % self._url
-
-	if str(kaseName) not in self.listKases():
-	        try:
-        	    req = urllib2.Request(url=url,
-                	      data=xml_string,
-                              headers={'Content-Type': 'application/xml'})
-	            urllib2.urlopen(req)
-
-        	    result = True
-	        except:
-        	    result = False
-
-	else:
-		result = False
-
-        return result
+        self._kases = self.createKasesList()
+        new_entry = 0
+        
+        
+        for x in self._kases:
+            if (x != "None" and x.keys()[0] == str(kaseName)):
+                new_entry =1
+                break
+       
+        
+       	if new_entry == 0:
+    	        try:
+            	    req = urllib2.Request(url=url,
+                    	      data=xml_string,
+                                  headers={'Content-Type': 'application/xml'})
+    	            urllib2.urlopen(req)
+                    return {kaseName:{'status':"for sale","contact": [{'name':"Support 4WindsRE", "email":"supportre@4windsre.com"}]}}
+    
+            	except:
+            	    return {str(kaseName):{'status':"unknown","contact": [{'name':"Support 4WindsRE", "email":"supportre@4windsre.com"}]}}
+        else:
+            #try:
+            print x
+            return {str(kaseName):{'status':x[str(kaseName)]["status"], "contact": x[kaseName]["contact"]}}
+            #except:
+            #    return {str(kaseName):{'status':"unknown","contact": [{'name':"Support 4WindsRE", "email":"supportre@4windsre.com"}]}}
+    
+      
+    
+    
+    
+    
 
 
 

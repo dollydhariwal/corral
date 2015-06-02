@@ -37,6 +37,11 @@ class ManageController(BaseController):
         highriseObj = HighriseController(self._url, self._token)
         result = highriseObj.createKase(kaseName)
         return result  
+    
+    def listContacts(self):
+        highriseObj = HighriseController(self._url, self._token)
+        result = highriseObj.createContactDict()
+        return result
   
 class statusForm(forms.SubmitButton):
         #class child(forms.TableForm):
