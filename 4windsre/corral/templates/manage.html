@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <xi:include href="master.html" />
+
+<head>
+  <title>Enter the address to get comparables</title>
+</head>
+
+<body>
+
+	<div class="row background">
+    <div class="col-xs-12">
+      <h2>Displaying properties for project $project</h2>
+      
+  	  <table border="0" cellpadding="5" style="width:75%">
+     	<tr>
+        	<th>Address</th>
+        	<th>Highrise Status</th>
+        	<th></th>
+        	<th>Email the concerned party</th>
+        </tr>
+        <tr py:for="x in result">
+        	<td>${x.keys()[0]}</td>
+  			<td>${x.values()[0]['status']}</td>
+  			<td >
+  				<form name="${project}" action="${tg.url('/email')}" method="POST">
+  				    <td><select ><option py:for="z in x.values()[0]['contact']" value="${z['email']}">${z['name']}</option></select>  ${emailform.display()}</td>
+  				   	<input type="hidden" name="$project"></input>
+  				</form>
+  			</td>
+  		</tr>	
+   
+	  </table>
+ 	</div>
+  </div>
+</body>
+</html>
