@@ -642,7 +642,7 @@ function GeocodeCallback () {
 				var try_again = false;
 				
 				if (status && status == google.maps.GeocoderStatus.OK && results && results[0] && results[0].geometry && results[0].geometry.location) {
-					sleep(600)
+					sleep(1000)
 					var coords = results[0].geometry.location;
 					d.latitude = parseFloat(results[0].geometry.location.lat().toFixed(7));
 					d.longitude = parseFloat(results[0].geometry.location.lng().toFixed(7));

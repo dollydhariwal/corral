@@ -25,12 +25,11 @@
     	  			
         ?>
         <form action="${tg.url('/plot')}">
-        	<input type="checkbox" id='toggle' onchange="togglecb(this,'cbg1[]')">Toggle All </input><br/><br/>
         	<input type="hidden" name="project" value="$project"></input>
   			<tr py:for="x, value in addressDict.items()" >
-  				<td><input type="checkbox" name="property" value="${x}"></input></td>
+  				<td><input type="checkbox" name="property" value="${x}" checked="true"></input></td>
   				
-  				<td><a href="${tg.url('/resultimages/' + projectName + '-address' + str(x) + '.pkl.png')}">${value}</a></td>
+  				<td><a href="${tg.url('/graphs/' + projectName + '-address' + str(x) + '.pkl.png')}">${value}</a></td>
   			</tr>
   			<tr>
   				<td></td>
